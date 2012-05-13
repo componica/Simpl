@@ -294,63 +294,63 @@ SOURCE=".\src\third_party\jpeg-8b\jutils.c"
 # PROP Default_Filter "c"
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\png.c"
+SOURCE=".\src\third_party\lpng-1.2.49\png.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\pngerror.c"
+SOURCE=".\src\third_party\lpng-1.2.49\pngerror.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\pngget.c"
+SOURCE=".\src\third_party\lpng-1.2.49\pngget.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\pngmem.c"
+SOURCE=".\src\third_party\lpng-1.2.49\pngmem.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\pngpread.c"
+SOURCE=".\src\third_party\lpng-1.2.49\pngpread.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\pngread.c"
+SOURCE=".\src\third_party\lpng-1.2.49\pngread.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\pngrio.c"
+SOURCE=".\src\third_party\lpng-1.2.49\pngrio.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\pngrtran.c"
+SOURCE=".\src\third_party\lpng-1.2.49\pngrtran.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\pngrutil.c"
+SOURCE=".\src\third_party\lpng-1.2.49\pngrutil.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\pngset.c"
+SOURCE=".\src\third_party\lpng-1.2.49\pngset.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\pngtrans.c"
+SOURCE=".\src\third_party\lpng-1.2.49\pngtrans.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\pngwio.c"
+SOURCE=".\src\third_party\lpng-1.2.49\pngwio.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\pngwrite.c"
+SOURCE=".\src\third_party\lpng-1.2.49\pngwrite.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\pngwtran.c"
+SOURCE=".\src\third_party\lpng-1.2.49\pngwtran.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\pngwutil.c"
+SOURCE=".\src\third_party\lpng-1.2.49\pngwutil.c"
 # End Source File
 # End Group
 # Begin Group "libZip Src"
@@ -358,51 +358,63 @@ SOURCE=".\src\third_party\libpng-1.2.40\pngwutil.c"
 # PROP Default_Filter "c"
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\adler32.c"
+SOURCE=".\src\third_party\zlib-1.2.7\adler32.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\compress.c"
+SOURCE=".\src\third_party\zlib-1.2.7\compress.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\crc32.c"
+SOURCE=".\src\third_party\zlib-1.2.7\crc32.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\deflate.c"
+SOURCE=".\src\third_party\zlib-1.2.7\deflate.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\gzio.c"
+SOURCE=".\src\third_party\zlib-1.2.7\gzclose.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\infback.c"
+SOURCE=".\src\third_party\zlib-1.2.7\gzlib.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\inffast.c"
+SOURCE=".\src\third_party\zlib-1.2.7\gzread.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\inflate.c"
+SOURCE=".\src\third_party\zlib-1.2.7\gzwrite.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\inftrees.c"
+SOURCE=".\src\third_party\zlib-1.2.7\infback.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\trees.c"
+SOURCE=".\src\third_party\zlib-1.2.7\inffast.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\uncompr.c"
+SOURCE=".\src\third_party\zlib-1.2.7\inflate.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\zutil.c"
+SOURCE=".\src\third_party\zlib-1.2.7\inftrees.c"
+# End Source File
+# Begin Source File
+
+SOURCE=".\src\third_party\zlib-1.2.7\trees.c"
+# End Source File
+# Begin Source File
+
+SOURCE=".\src\third_party\zlib-1.2.7\uncompr.c"
+# End Source File
+# Begin Source File
+
+SOURCE=".\src\third_party\zlib-1.2.7\zutil.c"
 # End Source File
 # End Group
 # Begin Source File
@@ -474,11 +486,11 @@ SOURCE=".\src\third_party\jpeg-8b\jversion.h"
 # PROP Default_Filter "h"
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\png.h"
+SOURCE=".\src\third_party\lpng-1.2.49\png.h"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\libpng-1.2.40\pngconf.h"
+SOURCE=".\src\third_party\lpng-1.2.49\pngconf.h"
 # End Source File
 # End Group
 # Begin Group "libZip Hdr"
@@ -486,47 +498,51 @@ SOURCE=".\src\third_party\libpng-1.2.40\pngconf.h"
 # PROP Default_Filter "h"
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\crc32.h"
+SOURCE=".\src\third_party\zlib-1.2.7\crc32.h"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\deflate.h"
+SOURCE=".\src\third_party\zlib-1.2.7\deflate.h"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\inffast.h"
+SOURCE=".\src\third_party\zlib-1.2.7\gzguts.h"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\inffixed.h"
+SOURCE=".\src\third_party\zlib-1.2.7\inffast.h"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\inflate.h"
+SOURCE=".\src\third_party\zlib-1.2.7\inffixed.h"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\inftrees.h"
+SOURCE=".\src\third_party\zlib-1.2.7\inflate.h"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\trees.h"
+SOURCE=".\src\third_party\zlib-1.2.7\inftrees.h"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\zconf.h"
+SOURCE=".\src\third_party\zlib-1.2.7\trees.h"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\zconf.in.h"
+SOURCE=".\src\third_party\zlib-1.2.7\zconf.h"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\zlib.h"
+SOURCE=".\src\third_party\zlib-1.2.7\zconf.in.h"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\third_party\zlib-1.2.3\zutil.h"
+SOURCE=".\src\third_party\zlib-1.2.7\zlib.h"
+# End Source File
+# Begin Source File
+
+SOURCE=".\src\third_party\zlib-1.2.7\zutil.h"
 # End Source File
 # End Group
 # End Group

@@ -4,7 +4,7 @@ CFLAGS = -O3 -Wall -ansi
 
 INCLUDE_DIR = include
 MAIN_SRC_DIR = src
-THIRD_PARTY = third_party/jpeg-8b third_party/libpng-1.2.40 third_party/zlib-1.2.3
+THIRD_PARTY = third_party/jpeg-8b third_party/lpng-1.2.49 third_party/zlib-1.2.7
 THIRD_PARTY_DIR = $(addprefix src/,$(THIRD_PARTY))
 
 SRC_DIR = $(MAIN_SRC_DIR) $(THIRD_PARTY_DIR)
