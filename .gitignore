@@ -1,0 +1,17 @@
+.DS_Store
+build
+tests/tests/tmp/
+doc/
+*.perspectivev3
+*.pbxuser
+*.mode1v3
+*.a
+*.o
+*.d
+*.exe
+*.ncb
+*.opt
+*.plg
+Debug
+Release
+
