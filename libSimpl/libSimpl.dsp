@@ -100,6 +100,10 @@ SOURCE=.\src\image.c
 
 SOURCE=.\src\simpl.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\src\stream.c
+# End Source File
 # End Group
 # Begin Group "libJpeg Src"
 
@@ -439,6 +443,10 @@ SOURCE=.\include\image.h
 # Begin Source File
 
 SOURCE=.\include\simpl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\stream.h
 # End Source File
 # End Group
 # Begin Group "libJpeg Hdr"

@@ -50,6 +50,7 @@ void unit_test(void)
 	test_constants_and_sizes();
 	test_image();
 	test_gray();
+	test_streams();
 }
 
 #endif

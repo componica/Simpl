@@ -141,8 +141,17 @@ typedef struct SimplRect {
 } SimplRect;
 
 
+/**
+ * Definition of the stream opaque pointer. The full definitions are found in
+ * "stream.c".
+ */
+typedef struct SimplInStream_t * SimplInStream;
+typedef struct SimplOutStream_t * SimplOutStream;
+
+
 #include "gray.h"
 #include "image.h"
+#include "stream.h"
 
 
 /** Public function for unit testing. */
