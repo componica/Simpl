@@ -150,6 +150,7 @@ typedef struct SimplStream_t * SimplOutStream;
 
 
 #include "gray.h"
+#include "file_io.h"
 #include "image.h"
 #include "stream.h"
 

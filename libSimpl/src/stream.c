@@ -575,7 +575,13 @@ void test_streams(void)
 		assert(header2[i] == header3[i]);
 	}
 	simpl_istream_skip(istr, 4);
-	assert(simpl_istream_read_byte(istr)==0x52); /* read from lena.png. */
+	
+	/* The following is directly from lena.png. */
+	assert(simpl_istream_read_byte(istr)==0x52);
+	assert(simpl_istream_read_le16(istr)==0x4247);
+	assert(simpl_istream_read_be16(istr)==0x00ae);
+	assert(simpl_istream_read_le32(istr)==0x00e91cce);
+	assert(simpl_istream_read_be32(istr)==0x073aa149);
 	
 	simpl_istream_free(&istr);
 	assert(istr==NULL);

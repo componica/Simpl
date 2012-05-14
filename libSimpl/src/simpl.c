@@ -51,6 +51,8 @@ void unit_test(void)
 	test_image();
 	test_gray();
 	test_streams();
+	test_image_io();
+	test_gray_io();
 }
 
 #endif
