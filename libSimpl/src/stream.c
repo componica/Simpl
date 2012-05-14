@@ -374,27 +374,30 @@ int simpl_ostream_write(SimplOutStream ostream,
 				old_size = (size_t)(ostream->buffer_end - ostream->buffer);
 				old_offset = (size_t)(ostream->buffer_ptr - ostream->buffer);
 				new_size = length + old_size + old_size;
-			
+				
 				new_buffer = (uint8_t *)realloc(ostream->buffer, sizeof(uint8_t)*new_size);
 				if (new_buffer) {
 					ostream->buffer = new_buffer;
 					ostream->buffer_ptr = ostream->buffer + old_offset;
 					ostream->buffer_end = ostream->buffer + new_size;
 				} else return FALSE;
-			} else {
-				memcpy(ostream->buffer_ptr, data, length);
-				ostream->buffer_ptr += length;
 			}
+			
+			memcpy(ostream->buffer_ptr, data, length);
+			ostream->buffer_ptr += length;
 		} else {
-			ostream->buffer = (uint8_t *)malloc(sizeof(uint8_t) * length);
+			new_size = length;
+			if (new_size < 256) new_size = 256;
+			
+			ostream->buffer = (uint8_t *)malloc(sizeof(uint8_t) * new_size);
 			if (!ostream->buffer) {
 				ostream->buffer_ptr = ostream->buffer_end = NULL;
 				return FALSE;
 			}
 			
 			memcpy(ostream->buffer, data, length);
-			ostream->buffer_end = ostream->buffer + length;
 			ostream->buffer_ptr = ostream->buffer + length;
+			ostream->buffer_end = ostream->buffer + new_size;
 		}
 	}
 	
@@ -467,7 +470,115 @@ int simpl_ostream_write_be32(SimplOutStream ostream,
 
 void test_streams(void)
 {
+	SimplInStream istr;
+	SimplOutStream ostr;
+	uint8_t *buffer, header[8], header2[16], header3[16];
+	size_t buffer_size, i;
+	
 	printf("\tTesting Streams.\n");
+	
+	/* Write a set of values to a buffer stream and check if it's invertible. */
+	assert(ostr = simpl_ostream_to_buffer());
+	
+	assert(simpl_ostream_write_byte(ostr, 1));
+	assert(simpl_ostream_write_byte(ostr, 2));
+	assert(simpl_ostream_write_byte(ostr, 3));
+	assert(simpl_ostream_write_le16(ostr, 0x1234));
+	assert(simpl_ostream_write_be16(ostr, 0x5678));
+	assert(simpl_ostream_write_le32(ostr, 0xdeadbeef));
+	assert(simpl_ostream_write_be32(ostr, 0xcafebabe));
+	
+	assert(buffer = simpl_ostream_detach(ostr, &buffer_size));
+	assert(buffer_size==15);
+	
+	simpl_ostream_free(&ostr);
+	assert(ostr==NULL);
+	
+	assert(istr = simpl_istream_from_buffer(buffer, buffer_size, FALSE));
+	assert(simpl_istream_good(istr));
+	
+	assert(simpl_istream_read_byte(istr)==1);
+	assert(simpl_istream_read_byte(istr)==2);
+	assert(simpl_istream_read_byte(istr)==3);
+	assert(simpl_istream_read_le16(istr)==0x1234);
+	assert(simpl_istream_read_be16(istr)==0x5678);
+	assert(simpl_istream_read_le32(istr)==0xdeadbeef);
+	assert(simpl_istream_read_be32(istr)==0xcafebabe);
+	
+	assert(!simpl_istream_good(istr));
+	simpl_istream_free(&istr);
+	assert(istr==NULL);
+	
+	free((void *)buffer);
+	
+	/* Now test the same process on a file. */
+	assert(ostr = simpl_ostream_to_file("tmp/stream_test.bin"));
+	
+	assert(simpl_ostream_write_byte(ostr, 1));
+	assert(simpl_ostream_write_byte(ostr, 2));
+	assert(simpl_ostream_write_byte(ostr, 3));
+	assert(simpl_ostream_write_le16(ostr, 0x1234));
+	assert(simpl_ostream_write_be16(ostr, 0x5678));
+	assert(simpl_ostream_write_le32(ostr, 0xdeadbeef));
+	assert(simpl_ostream_write_be32(ostr, 0xcafebabe));
+	
+	buffer = simpl_ostream_detach(ostr, &buffer_size);
+	assert(!buffer);
+	assert(!buffer_size);
+	
+	simpl_ostream_free(&ostr);
+	assert(ostr==NULL);
+	
+	assert(istr = simpl_istream_from_file("tmp/stream_test.bin"));
+	assert(simpl_istream_good(istr));
+	
+	assert(simpl_istream_read_byte(istr)==1);
+	assert(simpl_istream_read_byte(istr)==2);
+	assert(simpl_istream_read_byte(istr)==3);
+	assert(simpl_istream_read_le16(istr)==0x1234);
+	assert(simpl_istream_read_be16(istr)==0x5678);
+	assert(simpl_istream_read_le32(istr)==0xdeadbeef);
+	assert(simpl_istream_read_be32(istr)==0xcafebabe);
+	
+	/* EOF requires one extra read to trigger in files. */
+	assert(simpl_istream_read_byte(istr)==0);
+	assert(!simpl_istream_good(istr));
+	
+	/* Make sure that subsequent reads return 0. */
+	assert(simpl_istream_read_le16(istr)==0);
+	assert(simpl_istream_read_be16(istr)==0);
+	assert(simpl_istream_read_le32(istr)==0);
+	assert(simpl_istream_read_be32(istr)==0);
+	assert(!simpl_istream_good(istr));
+	
+	simpl_istream_free(&istr);
+	assert(istr==NULL);
+	
+	/* Now try peeking into the Lena image without moving the pointer. */
+	assert(istr = simpl_istream_from_file("images/lena.png"));
+	assert(simpl_istream_peek(istr, header, 8)==8);
+	assert(simpl_istream_peek(istr, header2, 16)==16);
+	assert(simpl_istream_read(istr, header3, 16)==16);
+	for (i=0; i<8; ++i) {
+		assert(header[i] == header2[i]);
+		assert(header[i] == header3[i]);
+	}
+	for (i=0; i<16; ++i) {
+		assert(header2[i] == header3[i]);
+	}
+	
+	/* Try skipping a couple bytes and peek / read. */
+	simpl_istream_skip(istr, 2);
+	assert(simpl_istream_peek(istr, header2, 16)==16);
+	assert(simpl_istream_read(istr, header3, 16)==16);
+	for (i=0; i<16; ++i) {
+		assert(header2[i] == header3[i]);
+	}
+	simpl_istream_skip(istr, 4);
+	assert(simpl_istream_read_byte(istr)==0x52); /* read from lena.png. */
+	
+	simpl_istream_free(&istr);
+	assert(istr==NULL);
 }
 
 #endif
