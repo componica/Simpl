@@ -162,6 +162,130 @@ uint32_t simpl_istream_read_be32(SimplInStream istream);
 
 
 /**
+ * Creates an output stream that stores into a buffer.
+ *
+ * @return A valid SimplOutStream or NULL if failure.
+ */
+SimplOutStream simpl_ostream_to_buffer();
+
+
+/**
+ * Creates an output stream to a given file path.
+ *
+ * @return A valid SimplOutStream or NULL if file not writable.
+ */
+SimplOutStream simpl_ostream_to_file(const char *filename);
+
+
+/**
+ * Creates an output stream to stdout.
+ *
+ * @return A valid SimplOutStream or NULL if failure.
+ */
+SimplOutStream simpl_ostream_to_stdout();
+
+
+/**
+ * Deallocates and closes resources to an output stream setting the stream to
+ * NULL.
+ *
+ * @param ostream A double pointer to an output stream.
+ */
+void simpl_ostream_free(SimplOutStream *ostream);
+
+
+/**
+ * Detaches and returns the current buffer from the output stream if the
+ * stream is a buffer stream, else NULL. The buffer is reset to an empty
+ * state, and you're responsible for freeing the returned pointer.
+ *
+ * @param ostream A valid SimplOutStream pointer.
+ * @param length A pointer to return the length of the buffer.
+ *
+ * @return Returns the buffer or NULL if the stream wasn't a buffered
+ *         stream, out of memory, or nothing was stored to begin with.
+ *         You're responsible for freeing this pointer.
+ */
+uint8_t *simpl_ostream_detach(SimplOutStream ostream,
+                              size_t *length);
+
+
+/**
+ * Stores a given number of bytes to the output stream. Returns 1 if
+ * successfully stored, else 0.
+ *
+ * @param ostream A valid SimplOutStream pointer.
+ * @param data The buffer to store.
+ * @param length The size of the buffer.
+ *
+ * @return 1 if successfully stored, else 0.
+ */
+int simpl_ostream_write(SimplOutStream ostream,
+                        const uint8_t *data,
+                        const size_t length);
+
+
+/**
+ * Writes a byte value to an output stream.
+ *
+ * @param ostream A valid SimplOutStream pointer.
+ * @param value A byte value to store.
+ *
+ * @return 1 if successfully stored, else 0.
+ */
+int simpl_ostream_write_byte(SimplOutStream ostream,
+                             const uint8_t value);
+
+
+/**
+ * Writes a little endian 16 bit value to an output stream.
+ *
+ * @param istream A valid SimplOutStream pointer.
+ * @param value A 16 bit value to store.
+ *
+ * @return 1 if successfully stored, else 0.
+ */
+int simpl_ostream_write_le16(SimplOutStream ostream,
+                             const uint16_t value);
+
+
+/**
+ * Writes a big endian 16 bit value to an output stream.
+ *
+ * @param istream A valid SimplOutStream pointer.
+ * @param value A 16 bit value to store.
+ *
+ * @return 1 if successfully stored, else 0.
+ */
+int simpl_ostream_write_be16(SimplOutStream ostream,
+                             const uint16_t value);
+
+
+/**
+ * Writes a little endian 32 bit value to an output stream.
+ *
+ * @param istream A valid SimplOutStream pointer.
+ * @param value A 32 bit value to store.
+ *
+ * @return 1 if successfully stored, else 0.
+ */
+int simpl_ostream_write_le32(SimplOutStream ostream,
+                             const uint32_t value);
+
+
+/**
+ * Writes a big endian 32 bit value to an output stream.
+ *
+ * @param istream A valid SimplOutStream pointer.
+ * @param value A 32 bit value to store.
+ *
+ * @return 1 if successfully stored, else 0.
+ */
+int simpl_ostream_write_be32(SimplOutStream ostream,
+                             const uint32_t value);
+
+
+/**
  * Public function for unit testing.
  */
 #ifndef NDEBUG

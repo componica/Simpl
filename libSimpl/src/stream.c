@@ -4,7 +4,7 @@
 
 #include "simpl.h"
 
-struct SimplInStream_t {
+struct SimplStream_t {
 	uint8_t *buffer;
 	uint8_t *buffer_end;
 	uint8_t *buffer_ptr;
@@ -13,19 +13,15 @@ struct SimplInStream_t {
 	int is_stdin;
 };
 
-struct SimplOutStream_t {
-	uint8_t *buffer;
-};
-
 
 SimplInStream simpl_istream_from_buffer(const uint8_t *data,
                                         const size_t length,
                                         int copy)
 {
-	struct SimplInStream_t *out = NULL;
+	struct SimplStream_t *out = NULL;
 	
 	if (data && length) {
-		out = (struct SimplInStream_t *)malloc(sizeof(struct SimplInStream_t));
+		out = (struct SimplStream_t *)malloc(sizeof(struct SimplStream_t));
 		if (!out) return NULL;
 		
 		if (copy) {
@@ -56,11 +52,11 @@ SimplInStream simpl_istream_from_buffer(const uint8_t *data,
 
 SimplInStream simpl_istream_from_file(const char *filename)
 {
-	struct SimplInStream_t *out = NULL;
+	struct SimplStream_t *out = NULL;
 	FILE *fp;
 	
 	if (filename && (fp = fopen(filename, "rb"))) {
-		out = (struct SimplInStream_t *)malloc(sizeof(struct SimplInStream_t));
+		out = (struct SimplStream_t *)malloc(sizeof(struct SimplStream_t));
 		if (!out) {
 			fclose(fp);
 			return NULL;
@@ -78,9 +74,9 @@ SimplInStream simpl_istream_from_file(const char *filename)
 
 SimplInStream simpl_istream_from_stdin()
 {
-	struct SimplInStream_t *out = NULL;
+	struct SimplStream_t *out = NULL;
 	
-	out = (struct SimplInStream_t *)malloc(sizeof(struct SimplInStream_t));
+	out = (struct SimplStream_t *)malloc(sizeof(struct SimplStream_t));
 	if (out) {
 		out->fp = stdin;
 		out->buffer = out->buffer_end = out->buffer_ptr = NULL;
@@ -113,7 +109,6 @@ int simpl_istream_good(SimplInStream istream)
 {
 	if (istream->buffer && istream->buffer_ptr<istream->buffer_end) return TRUE;
 	if (istream->fp && !feof(istream->fp)) return TRUE;
-
 	return FALSE;
 }
 
@@ -122,14 +117,75 @@ size_t simpl_istream_peek(SimplInStream istream,
                           uint8_t *data,
                           const size_t length)
 {
-	return 0;
+	size_t i, len=0;
+	uint8_t *new_buffer;
+	
+	if (istream->fp) {
+		if (istream->buffer) {
+			len = (size_t)(istream->buffer_end - istream->buffer_ptr);
+			if (len<length) {
+				for (i=0; i<len; ++i) {
+					istream->buffer[i] = istream->buffer_ptr[i];
+				}
+				
+				if ((size_t)(istream->buffer_end - istream->buffer) < length) {
+					new_buffer = (uint8_t *)realloc(istream->buffer, sizeof(uint8_t)*length);
+					if (new_buffer) {
+						istream->buffer = istream->buffer_ptr = new_buffer;
+						i = fread(&istream->buffer[len], sizeof(uint8_t), length-len, istream->fp);
+						istream->buffer_end = istream->buffer + (len + i);
+					} else {
+						istream->buffer_ptr = istream->buffer;
+						istream->buffer_end = istream->buffer + len;
+					}
+				} else {
+					istream->buffer_ptr = istream->buffer;
+					i = fread(&istream->buffer[len], sizeof(uint8_t), length-len, istream->fp);
+					istream->buffer_end = istream->buffer + (len + i);
+				}
+			}
+		} else {
+			istream->buffer = istream->buffer_ptr = (uint8_t *)malloc(sizeof(uint8_t)*length);
+			if (istream->buffer) {
+				len = fread(istream->buffer, sizeof(uint8_t), length, istream->fp);
+				istream->buffer_end = istream->buffer + len;
+			} else {
+				istream->buffer_ptr = istream->buffer_end = NULL;
+			}
+		}
+	}
+	
+	len = (size_t)(istream->buffer_end - istream->buffer_ptr);
+	for (i=0; i<len && i<length; ++i) {
+		data[i] = istream->buffer_ptr[i];
+	}
+	
+	for (;i<length; ++i) data[i] = 0;
+	
+	return len;
 }
 
 
 void simpl_istream_skip(SimplInStream istream,
                         const size_t offset)
 {
+	size_t i, len, total = offset;
 	
+	len = (size_t)(istream->buffer_end - istream->buffer_ptr);
+	if (len<total) {
+		istream->buffer_ptr += len;
+		total -= len;
+	} else {
+		istream->buffer_ptr += offset;
+		return;
+	}
+	
+	if (istream->fp) {
+		/* This is stupid, but portable with stdin */
+		for (i=0; i<total; ++i) {
+			if (fgetc(istream->fp)==EOF) break;
+		}
+	}
 }
 
 
@@ -213,6 +269,195 @@ uint32_t simpl_istream_read_be32(SimplInStream istream)
 	}
 	
 	return 0;
+}
+
+
+SimplOutStream simpl_ostream_to_buffer()
+{
+	struct SimplStream_t *out = NULL;
+	
+	out = (struct SimplStream_t *)malloc(sizeof(struct SimplStream_t));
+	if (out) {
+		out->buffer = out->buffer_end = out->buffer_ptr = NULL;
+		out->fp = NULL;
+		out->copied = TRUE;
+		out->is_stdin = FALSE;
+	}
+	
+	return out;
+}
+
+
+SimplOutStream simpl_ostream_to_file(const char *filename)
+{
+	struct SimplStream_t *out = NULL;
+	FILE *fp;
+	
+	if (filename && (fp = fopen(filename, "wb"))) {
+		out = (struct SimplStream_t *)malloc(sizeof(struct SimplStream_t));
+		if (!out) {
+			fclose(fp);
+			return NULL;
+		}
+		
+		out->buffer = out->buffer_end = out->buffer_ptr = NULL;
+		out->fp = fp;
+		out->copied = FALSE;
+		out->is_stdin = FALSE;
+	}
+	
+	return out;
+}
+
+
+SimplOutStream simpl_ostream_to_stdout()
+{
+	struct SimplStream_t *out = NULL;
+	
+	out = (struct SimplStream_t *)malloc(sizeof(struct SimplStream_t));
+	if (out) {
+		out->buffer = out->buffer_end = out->buffer_ptr = NULL;
+		out->fp = stdout;
+		out->copied = FALSE;
+		out->is_stdin = TRUE;
+	}
+	
+	return out;
+}
+
+
+void simpl_ostream_free(SimplOutStream *ostream)
+{
+	if (*ostream) {
+		if ((*ostream)->buffer) {
+			free((void *)(*ostream)->buffer);
+		}
+		
+		if ((*ostream)->fp && !(*ostream)->is_stdin) {
+			fclose((*ostream)->fp);
+		}
+		
+		free((void *)(*ostream));
+		*ostream = NULL;
+	}
+}
+
+
+uint8_t *simpl_ostream_detach(SimplOutStream ostream,
+                              size_t *length)
+{
+	uint8_t *out = NULL;
+	
+	*length = 0;
+	if (ostream->buffer) {
+		out = ostream->buffer;
+		*length = (size_t)(ostream->buffer_ptr - ostream->buffer);
+		ostream->buffer = ostream->buffer_end = ostream->buffer_ptr = NULL;
+	}
+	
+	return out;
+}
+
+
+int simpl_ostream_write(SimplOutStream ostream,
+                        const uint8_t *data,
+                        const size_t length)
+{
+	size_t old_size, old_offset, new_size;
+	uint8_t *new_buffer;
+	
+	if (ostream->fp) {
+		if (fwrite(data, sizeof(uint8_t), length, ostream->fp)!=length) return FALSE;
+	} else {
+		if (ostream->buffer) {
+			if ((size_t)(ostream->buffer_end - ostream->buffer_ptr) < length) {
+				old_size = (size_t)(ostream->buffer_end - ostream->buffer);
+				old_offset = (size_t)(ostream->buffer_ptr - ostream->buffer);
+				new_size = length + old_size + old_size;
+			
+				new_buffer = (uint8_t *)realloc(ostream->buffer, sizeof(uint8_t)*new_size);
+				if (new_buffer) {
+					ostream->buffer = new_buffer;
+					ostream->buffer_ptr = ostream->buffer + old_offset;
+					ostream->buffer_end = ostream->buffer + new_size;
+				} else return FALSE;
+			} else {
+				memcpy(ostream->buffer_ptr, data, length);
+				ostream->buffer_ptr += length;
+			}
+		} else {
+			ostream->buffer = (uint8_t *)malloc(sizeof(uint8_t) * length);
+			if (!ostream->buffer) {
+				ostream->buffer_ptr = ostream->buffer_end = NULL;
+				return FALSE;
+			}
+			
+			memcpy(ostream->buffer, data, length);
+			ostream->buffer_end = ostream->buffer + length;
+			ostream->buffer_ptr = ostream->buffer + length;
+		}
+	}
+	
+	return TRUE;
+}
+
+
+int simpl_ostream_write_byte(SimplOutStream ostream,
+                             const uint8_t value)
+{
+	return simpl_ostream_write(ostream, &value, 1);
+}
+
+
+int simpl_ostream_write_le16(SimplOutStream ostream,
+                             const uint16_t value)
+{
+	uint8_t data[2];
+	
+	data[0] = value & 0xff;
+	data[1] = (value >> 8) & 0xff;
+	
+	return simpl_ostream_write(ostream, data, 2);
+}
+
+
+int simpl_ostream_write_be16(SimplOutStream ostream,
+                             const uint16_t value)
+{
+	uint8_t data[2];
+	
+	data[0] = (value >> 8) & 0xff;
+	data[1] = value & 0xff;
+	
+	return simpl_ostream_write(ostream, data, 2);
+}
+
+
+int simpl_ostream_write_le32(SimplOutStream ostream,
+                             const uint32_t value)
+{
+	uint8_t data[4];
+	
+	data[0] = (uint8_t)(value & 0xffL);
+	data[1] = (uint8_t)((value >> 8) & 0xffL);
+	data[2] = (uint8_t)((value >> 16) & 0xffL);
+	data[3] = (uint8_t)((value >> 24) & 0xffL);
+	
+	return simpl_ostream_write(ostream, data, 4);
+}
+
+
+int simpl_ostream_write_be32(SimplOutStream ostream,
+                             const uint32_t value)
+{
+	uint8_t data[4];
+	
+	data[0] = (uint8_t)((value >> 24) & 0xffL);
+	data[1] = (uint8_t)((value >> 16) & 0xffL);
+	data[2] = (uint8_t)((value >> 8) & 0xffL);
+	data[3] = (uint8_t)(value & 0xffL);
+	
+	return simpl_ostream_write(ostream, data, 4);
 }
 
 
