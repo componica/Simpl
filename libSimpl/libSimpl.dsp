@@ -94,6 +94,10 @@ SOURCE=.\src\file_io.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\file_io_jpg.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\file_io_png.c
 # End Source File
 # Begin Source File
@@ -443,6 +447,10 @@ SOURCE=.\test\main.c
 # Begin Source File
 
 SOURCE=.\include\file_io.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\file_io_jpg.h
 # End Source File
 # Begin Source File
 

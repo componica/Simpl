@@ -358,6 +358,10 @@ void test_image_io(void)
 	assert(simpl_image_load(&img, "images/lena_interlaced.png")==SIMPL_OK);
 	assert(simpl_image_save(img, "tmp/lena2.png")==SIMPL_OK);
 	simpl_image_free(&img);
+	
+	assert(simpl_image_load(&img, "images/steve.jpeg")==SIMPL_OK);
+	assert(simpl_image_save(img, "tmp/steve.png")==SIMPL_OK);
+	simpl_image_free(&img);
 }
 
 
@@ -369,6 +373,10 @@ void test_gray_io(void)
 
 	assert(simpl_gray_load(&img, "images/lena_interlaced.png", COLOR_TO_GRAY_CIE, 0)==SIMPL_OK);
 	assert(simpl_gray_save(img, "tmp/lena3.png")==SIMPL_OK);
+	simpl_gray_free(&img);
+
+	assert(simpl_gray_load(&img, "images/steve.jpeg", COLOR_TO_GRAY_CIE, 0)==SIMPL_OK);
+	assert(simpl_gray_save(img, "tmp/steve2.png")==SIMPL_OK);
 	simpl_gray_free(&img);
 }
 
