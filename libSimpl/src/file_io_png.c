@@ -4,7 +4,7 @@
 
 #include "simpl.h"
 
-/** This a callback function to stream in a PNG instead of a file. */
+/** These are callback functions to stream a PNG instead of through file. */
 static void StreamReadData(png_structp png_ptr, png_bytep data, png_size_t length)
 {
 	SimplInStream istrm = (SimplInStream)png_get_io_ptr(png_ptr);

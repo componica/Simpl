@@ -68,6 +68,7 @@ int simpl_image_load(SimplImage **image,
 			break;
 			
 		case IMAGE_JPG:
+			out = simpl_image_load_jpg(image, istr);
 			break;
 			
 		case IMAGE_PNG:
@@ -109,6 +110,7 @@ int simpl_image_load_buffer(SimplImage **image,
 			break;
 			
 		case IMAGE_JPG:
+			out = simpl_image_load_jpg(image, istr);
 			break;
 			
 		case IMAGE_PNG:
@@ -143,6 +145,7 @@ int simpl_image_save(const SimplImage *image,
 			break;
 			
 		case IMAGE_JPG:
+			out = simpl_image_save_jpg(ostr, image, 95);
 			break;
 			
 		case IMAGE_PNG:
@@ -175,6 +178,7 @@ int simpl_image_save_buffer(uint8_t **data,
 			break;
 			
 		case IMAGE_JPG:
+			out = simpl_image_save_jpg(ostr, image, 95);
 			break;
 			
 		case IMAGE_PNG:
@@ -213,6 +217,7 @@ int simpl_gray_load(SimplGrayImage **image,
 			break;
 			
 		case IMAGE_JPG:
+			out = simpl_gray_load_jpg(image, istr, method, bk_value);
 			break;
 			
 		case IMAGE_PNG:
@@ -256,6 +261,7 @@ int simpl_gray_load_buffer(SimplGrayImage **image,
 			break;
 			
 		case IMAGE_JPG:
+			out = simpl_gray_load_jpg(image, istr, method, bk_value);
 			break;
 			
 		case IMAGE_PNG:
@@ -290,6 +296,7 @@ int simpl_gray_save(const SimplGrayImage *image,
 			break;
 			
 		case IMAGE_JPG:
+			out = simpl_gray_save_jpg(ostr, image, 95);
 			break;
 			
 		case IMAGE_PNG:
@@ -322,6 +329,7 @@ int simpl_gray_save_buffer(uint8_t **data,
 			break;
 			
 		case IMAGE_JPG:
+			out = simpl_gray_save_jpg(ostr, image, 95);
 			break;
 			
 		case IMAGE_PNG:
