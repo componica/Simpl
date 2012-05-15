@@ -21,7 +21,7 @@ int simpl_image_load(SimplImage **image,
 
 
 /**
- * Loads an image from a buffer automatically determing the file format.
+ * Loads an image from a buffer automatically determining the file format.
  *
  * @param image A double pointer to an existing image or NULL.
  * @param data The buffer to decode.
@@ -85,7 +85,7 @@ int simpl_gray_load(SimplGrayImage **image,
 
 
 /**
- * Loads a gray image from a buffer automatically determing the file format.
+ * Loads a gray image from a buffer automatically determining the file format.
  *
  * @param image A double pointer to an existing gray image or NULL.
  * @param data The buffer to decode.

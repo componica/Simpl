@@ -71,11 +71,11 @@ int simpl_image_load(SimplImage **image,
 			break;
 			
 		case IMAGE_PNG:
+			out = simpl_image_load_png(image, istr);
 			break;
 			
 		default:
 			out = SIMPL_INTERNAL;
-			goto finished;
 			break;
 		}
 	} else out = SIMPL_BAD_PARAMS;
@@ -112,11 +112,11 @@ int simpl_image_load_buffer(SimplImage **image,
 			break;
 			
 		case IMAGE_PNG:
+			out = simpl_image_load_png(image, istr);
 			break;
 			
 		default:
 			out = SIMPL_INTERNAL;
-			goto finished;
 			break;
 		}
 	} else out = SIMPL_BAD_PARAMS;
@@ -147,6 +147,7 @@ int simpl_image_save(const SimplImage *image,
 			
 		case IMAGE_PNG:
 		default:
+			out = simpl_image_save_png(ostr, image);
 			break;
 		}
 	} else out = SIMPL_BAD_PARAMS;
@@ -178,6 +179,7 @@ int simpl_image_save_buffer(uint8_t **data,
 			
 		case IMAGE_PNG:
 		default:
+			out = simpl_image_save_png(ostr, image);
 			break;
 		}
 	} else out = SIMPL_BAD_PARAMS;
@@ -214,11 +216,11 @@ int simpl_gray_load(SimplGrayImage **image,
 			break;
 			
 		case IMAGE_PNG:
+			out = simpl_gray_load_png(image, istr, method, bk_value);
 			break;
 			
 		default:
 			out = SIMPL_INTERNAL;
-			goto finished;
 			break;
 		}
 	} else out = SIMPL_BAD_PARAMS;
@@ -257,11 +259,11 @@ int simpl_gray_load_buffer(SimplGrayImage **image,
 			break;
 			
 		case IMAGE_PNG:
+			out = simpl_gray_load_png(image, istr, method, bk_value);
 			break;
 			
 		default:
 			out = SIMPL_INTERNAL;
-			goto finished;
 			break;
 		}
 	} else out = SIMPL_BAD_PARAMS;
@@ -275,7 +277,30 @@ finished:
 int simpl_gray_save(const SimplGrayImage *image,
                     const char *filename)
 {
-	return SIMPL_OK;
+	SimplOutStream ostr = NULL;
+	int out = SIMPL_INTERNAL;
+	
+	ostr = simpl_ostream_to_file(filename);
+	if (ostr) {
+		switch (GuessFileExtension(filename)) {
+		case IMAGE_GIF:
+			break;
+			
+		case IMAGE_BMP:
+			break;
+			
+		case IMAGE_JPG:
+			break;
+			
+		case IMAGE_PNG:
+		default:
+			out = simpl_gray_save_png(ostr, image);
+			break;
+		}
+	} else out = SIMPL_BAD_PARAMS;
+	
+	if (ostr) simpl_ostream_free(&ostr);
+	return out;
 }
 
 
@@ -284,7 +309,30 @@ int simpl_gray_save_buffer(uint8_t **data,
                            const SimplGrayImage *image,
                            const SimplFileFormat format)
 {
-	return SIMPL_OK;
+	SimplOutStream ostr = NULL;
+	int out = SIMPL_INTERNAL;
+	
+	ostr = simpl_ostream_to_buffer();
+	if (ostr) {
+		switch (format) {
+		case IMAGE_GIF:
+			break;
+			
+		case IMAGE_BMP:
+			break;
+			
+		case IMAGE_JPG:
+			break;
+			
+		case IMAGE_PNG:
+		default:
+			out = simpl_gray_save_png(ostr, image);
+			break;
+		}
+	} else out = SIMPL_BAD_PARAMS;
+	
+	if (ostr) simpl_ostream_free(&ostr);
+	return out;
 }
 
 
@@ -295,13 +343,25 @@ int simpl_gray_save_buffer(uint8_t **data,
 
 void test_image_io(void)
 {
+	SimplImage *img = NULL;
+	
 	printf("\tTesting Color Image I/O.\n");
+	
+	assert(simpl_image_load(&img, "images/lena_interlaced.png")==SIMPL_OK);
+	assert(simpl_image_save(img, "tmp/lena2.png")==SIMPL_OK);
+	simpl_image_free(&img);
 }
 
 
 void test_gray_io(void)
 {
+	SimplGrayImage *img = NULL;
+
 	printf("\tTesting Gray Image I/O.\n");
+
+	assert(simpl_gray_load(&img, "images/lena_interlaced.png", COLOR_TO_GRAY_CIE, 0)==SIMPL_OK);
+	assert(simpl_gray_save(img, "tmp/lena3.png")==SIMPL_OK);
+	simpl_gray_free(&img);
 }
 
 #endif

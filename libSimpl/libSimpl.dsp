@@ -90,6 +90,14 @@ LINK32=link.exe
 # PROP Default_Filter "c"
 # Begin Source File
 
+SOURCE=.\src\file_io.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\file_io_png.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\gray.c
 # End Source File
 # Begin Source File
@@ -432,6 +440,14 @@ SOURCE=.\test\main.c
 # Begin Group "libSimpl Hdr"
 
 # PROP Default_Filter "h"
+# Begin Source File
+
+SOURCE=.\include\file_io.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\file_io_png.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\include\gray.h
