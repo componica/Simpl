@@ -54,49 +54,49 @@ typedef unsigned __int64 uint64_t;
 
 /** The possible types of supported image file formats. */
 typedef enum SimplFileFormat {
-	IMAGE_NONE, /* Either bad image or not specified flag. */
-	IMAGE_GIF,
-	IMAGE_BMP,
-	IMAGE_JPG,
-	IMAGE_PNG
+    IMAGE_NONE, /* Either bad image or not specified flag. */
+    IMAGE_GIF,
+    IMAGE_BMP,
+    IMAGE_JPG,
+    IMAGE_PNG
 } SimplFileFormat;
 
 
 /** The possible ways of converting a gray image to an image. */
 typedef enum SimplGrayToColorMethods {
-	GRAY_TO_ALL=0,        /* Just load the value to red, green, and blue. */
-	GRAY_TO_COLOR_RED,    /* Just load the red channel. */
-	GRAY_TO_COLOR_GREEN,  /* The green channel. */
-	GRAY_TO_COLOR_BLUE,   /* The blue channel. */
-	GRAY_TO_COLOR_ALPHA,  /* Loads the alpha. */
+    GRAY_TO_ALL=0,        /* Just load the value to red, green, and blue. */
+    GRAY_TO_COLOR_RED,    /* Just load the red channel. */
+    GRAY_TO_COLOR_GREEN,  /* The green channel. */
+    GRAY_TO_COLOR_BLUE,   /* The blue channel. */
+    GRAY_TO_COLOR_ALPHA,  /* Loads the alpha. */
 } SimplGrayToColorMethods;
 
 
 /** The possible ways of converting an image to a gray image. */
 typedef enum SimplColorToGrayMethods {
-	COLOR_TO_GRAY_MEAN=0, /* Just compute the average value. */
-	COLOR_TO_GRAY_RED,    /* Just load the red channel. */
-	COLOR_TO_GRAY_GREEN,  /* The green channel. */
-	COLOR_TO_GRAY_BLUE,   /* The blue channel. */
-	COLOR_TO_GRAY_ALPHA,  /* Loads the alpha or black if not present. */
-	COLOR_TO_GRAY_CIE	  /* The CIE method of converting color to gray scale. */
+    COLOR_TO_GRAY_MEAN=0, /* Just compute the average value. */
+    COLOR_TO_GRAY_RED,    /* Just load the red channel. */
+    COLOR_TO_GRAY_GREEN,  /* The green channel. */
+    COLOR_TO_GRAY_BLUE,   /* The blue channel. */
+    COLOR_TO_GRAY_ALPHA,  /* Loads the alpha or black if not present. */
+    COLOR_TO_GRAY_CIE     /* The CIE method of converting color to gray scale. */
 } SimplColorToGrayMethods;
 
 
 /** The possible ways to continuously sample pixels. */
 typedef enum SimplSamplingMethods {
-	SAMPLE_NEAREST_NEIGHBOR,
-	SAMPLE_BILINEAR,
-	SAMPLE_HIGH_ORDER
+    SAMPLE_NEAREST_NEIGHBOR,
+    SAMPLE_BILINEAR,
+    SAMPLE_HIGH_ORDER
 } SimplSamplingMethods;
 
 
 /** Specifies how to handle boundaries of images. */
 typedef enum SimplBoundaryMethods {
-	BOUNDARY_USE_BKGND,   /* Use a background color */
-	BOUNDARY_STRETCH,     /* The border pixels are infinitely replicated. */
-	BOUNDARY_WRAP,        /* Wrap around like a torus. */
-	BOUNDARY_MIRROR       /* Mirror the border. */
+    BOUNDARY_USE_BKGND,   /* Use a background color */
+    BOUNDARY_STRETCH,     /* The border pixels are infinitely replicated. */
+    BOUNDARY_WRAP,        /* Wrap around like a torus. */
+    BOUNDARY_MIRROR       /* Mirror the border. */
 } SimplBoundaryMethods;
 
 
@@ -104,40 +104,40 @@ typedef enum SimplBoundaryMethods {
 typedef uint8_t SimplPixel;
 
 typedef struct SimplColorPixel {
-	SimplPixel blue;
-	SimplPixel green;
-	SimplPixel red;
+    SimplPixel blue;
+    SimplPixel green;
+    SimplPixel red;
 } SimplColorPixel;
 
 
 /** Definition of a colored image. */
 typedef struct SimplImage {
-	SimplColorPixel *image;
-	SimplPixel      *alpha;
-	
-	size_t           width;
-	size_t           height;
+    SimplColorPixel *image;
+    SimplPixel      *alpha;
+    
+    size_t           width;
+    size_t           height;
 } SimplImage;
 
 
 /** Definition of a gray-level or binary image. */
 typedef struct SimplGrayImage {
-	SimplPixel      *image;
-	
-	size_t           width;
-	size_t           height;
+    SimplPixel      *image;
+    
+    size_t           width;
+    size_t           height;
 } SimplGrayImage;
 
 
 /** Definition of an integer 2D point. */
 typedef struct SimplPoint {
-	int x, y;
+    int x, y;
 } SimplPoint;
 
 
 /** Definition of a rectangle. */
 typedef struct SimplRect {
-	int min_x, min_y, max_x, max_y;
+    int min_x, min_y, max_x, max_y;
 } SimplRect;
 
 
