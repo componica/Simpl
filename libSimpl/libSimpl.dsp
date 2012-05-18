@@ -110,6 +110,10 @@ SOURCE=.\src\image.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\rect.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\simpl.c
 # End Source File
 # Begin Source File
@@ -463,6 +467,10 @@ SOURCE=.\include\gray.h
 # Begin Source File
 
 SOURCE=.\include\image.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\rect.h
 # End Source File
 # Begin Source File
 

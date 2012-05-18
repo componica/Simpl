@@ -139,7 +139,29 @@ int simpl_gray_patch(SimplGrayImage **dest_img,
                      const SimplBoundaryMethods boundary,
                      const SimplColorPixel bk_value)
 {
-    return SIMPL_OK;
+    SimplGrayImage *out = NULL;
+    int result = SIMPL_OK;
+    
+    if (src_img && src_img->image && src_img->width && src_img->height && !simpl_rect_EMPTY(*rect)) {
+        if (*dest_img==src_img) {
+            result = simpl_gray(&out, simpl_rect_WIDTH(*rect), simpl_rect_HEIGHT(*rect));
+        } else {
+            result = simpl_gray(dest_img, simpl_rect_WIDTH(*rect), simpl_rect_HEIGHT(*rect));
+            out = *dest_img;
+        }
+        if (result!=SIMPL_OK) goto error;
+        
+        /* Do stuff. */
+        
+        if (out!=*dest_img) {
+            result = simpl_gray_copy(dest_img, out);
+            if (result!=SIMPL_OK) goto error;
+        }
+    } else return SIMPL_BAD_PARAMS;
+
+error:
+    if (out && out!=*dest_img) simpl_gray_free(&out);
+    return result;
 }
 
 

@@ -48,6 +48,7 @@ static void test_constants_and_sizes(void)
 void unit_test(void)
 {
     test_constants_and_sizes();
+    test_rectangle();
     test_image();
     test_gray();
     test_streams();

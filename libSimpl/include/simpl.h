@@ -154,6 +154,7 @@ typedef struct SimplStream_t * SimplOutStream;
 #include "file_io_jpg.h"
 #include "file_io_png.h"
 #include "image.h"
+#include "rect.h"
 #include "stream.h"
 
 
